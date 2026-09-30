@@ -8,6 +8,9 @@ from urllib.request import Request, urlopen
 
 from flask import Flask, jsonify, request, send_from_directory
 
+# ---------------------------------------------------------------------------
+# App configuration
+# ---------------------------------------------------------------------------
 app = Flask(__name__, static_folder="../Frontend", static_url_path="")
 FRONTEND_DIR = Path(app.root_path).parent / "Frontend"
 GEOCODING_API = "https://geocoding-api.open-meteo.com/v1/search"
@@ -26,6 +29,9 @@ def add_cors_headers(response):
     return response
 
 
+# ---------------------------------------------------------------------------
+# Shared helpers
+# ---------------------------------------------------------------------------
 def fetch_json(url: str) -> dict | list:
     req = Request(url, headers={"User-Agent": "MiniProjectWeatherAPI/1.0"})
     with urlopen(req, timeout=HTTP_TIMEOUT_SECONDS) as response:
@@ -117,7 +123,10 @@ def reverse_location(latitude: float, longitude: float):
     data = fetch_json(url)
     address = data.get("address") or {}
     return {
-        "city": address.get("city") or address.get("town") or address.get("village") or "Current location",
+        "city": address.get("city")
+        or address.get("town")
+        or address.get("village")
+        or "Current location",
         "state": address.get("state"),
         "country": address.get("country"),
         "latitude": latitude,
@@ -151,6 +160,59 @@ def find_average_price(prices: list, item_text: str):
             except (KeyError, TypeError, ValueError):
                 return None
     return None
+
+
+def currency_multiplier(currency: str) -> float:
+    return {"INR": 1.0, "USD": 0.012, "EUR": 0.011}.get(currency.upper(), 1.0)
+
+
+def fallback_budget_estimate(city: str, currency: str, days: int, travelers: int):
+    city_key = (city or "").lower()
+    if "india" in city_key or "jaipur" in city_key or "goa" in city_key or "kochi" in city_key or "rishikesh" in city_key:
+        meal = 260
+        transport = 120
+        activities = 320
+        accommodation = 1800
+    elif "paris" in city_key or "france" in city_key or "tokyo" in city_key or "japan" in city_key:
+        meal = 700
+        transport = 240
+        activities = 650
+        accommodation = 4200
+    elif "bali" in city_key or "indonesia" in city_key:
+        meal = 500
+        transport = 180
+        activities = 430
+        accommodation = 2600
+    else:
+        meal = 450
+        transport = 180
+        activities = 500
+        accommodation = 2400
+
+    multiplier = currency_multiplier(currency)
+    food = meal * travelers * days * multiplier
+    local_transport = transport * travelers * days * multiplier
+    activities_total = activities * travelers * days * multiplier
+    accommodation_total = accommodation * max(days - 1, 0) * multiplier
+    priced_costs = food + local_transport + activities_total + accommodation_total
+    contingency = priced_costs * 0.12
+
+    return {
+        "city": city or "Your destination",
+        "currency": currency.upper(),
+        "days": days,
+        "travelers": travelers,
+        "total": round(priced_costs + contingency, 2),
+        "breakdown": {
+            "food": round(food, 2),
+            "activities": round(activities_total, 2),
+            "local_transport": round(local_transport, 2),
+            "accommodation_proxy": round(accommodation_total, 2),
+            "contingency": round(contingency, 2),
+        },
+        "unavailable": ["food", "activities", "local_transport", "accommodation"],
+        "source": "Local fallback estimate",
+    }
 
 
 @app.get("/health")
@@ -206,11 +268,21 @@ def weather():
             lat = float(lat_arg)
             lon = float(lon_arg)
         except ValueError:
-            return jsonify({"error": "Latitude and longitude must be valid numbers."}), 400
+            return (
+                jsonify({"error": "Latitude and longitude must be valid numbers."}),
+                400,
+            )
         city_label = "Custom location"
         country_label = "Coordinates"
     else:
-        return jsonify({"error": "Provide a 'city' query parameter or both 'lat' and 'lon' parameters."}), 400
+        return (
+            jsonify(
+                {
+                    "error": "Provide a 'city' query parameter or both 'lat' and 'lon' parameters."
+                }
+            ),
+            400,
+        )
 
     forecast_url = (
         f"{FORECAST_API}?latitude={lat}&longitude={lon}"
@@ -255,28 +327,29 @@ def places():
     except Exception as exc:
         return jsonify({"error": f"Unable to fetch places: {exc}"}), 502
 
-    return jsonify({
-        "city": location["city"],
-        "country": location.get("country"),
-        "latitude": location["latitude"],
-        "longitude": location["longitude"],
-        "places": attractions + food,
-    })
+    return jsonify(
+        {
+            "city": location["city"],
+            "country": location.get("country"),
+            "latitude": location["latitude"],
+            "longitude": location["longitude"],
+            "places": attractions + food,
+        }
+    )
 
 
 @app.get("/budget")
 def budget():
-    api_key = os.environ.get("NUMBEO_API_KEY")
-    if not api_key:
-        return jsonify({"error": "Live city prices require a NUMBEO_API_KEY configuration."}), 503
-
     city = " ".join(request.args.get("city", "").split())
     currency = request.args.get("currency", "INR").upper()
     try:
         days = int(request.args.get("days", "0"))
         travelers = int(request.args.get("travelers", "0"))
     except ValueError:
-        return jsonify({"error": "Days and travelers must be valid whole numbers."}), 400
+        return (
+            jsonify({"error": "Days and travelers must be valid whole numbers."}),
+            400,
+        )
 
     if not city:
         return jsonify({"error": "Provide a 'city' query parameter."}), 400
@@ -285,6 +358,10 @@ def budget():
     if currency not in {"INR", "USD", "EUR"}:
         return jsonify({"error": "Currency must be INR, USD, or EUR."}), 400
 
+    api_key = os.environ.get("NUMBEO_API_KEY")
+    if not api_key:
+        return jsonify(fallback_budget_estimate(city, currency, days, travelers))
+
     params = urlencode({"api_key": api_key, "query": city, "currency": currency})
     try:
         data = fetch_json(f"{NUMBEO_API}?{params}")
@@ -292,17 +369,30 @@ def budget():
             raise ValueError("The price provider returned an invalid response.")
         response_currency = data.get("currency")
         if response_currency and response_currency != currency:
-            raise ValueError(f"The provider returned prices in {response_currency}, not {currency}.")
+            raise ValueError(
+                f"The provider returned prices in {response_currency}, not {currency}."
+            )
 
         prices = data.get("prices") or []
         meal_price = find_average_price(prices, "meal, inexpensive restaurant")
         transit_price = find_average_price(prices, "one-way ticket")
         activity_price = find_average_price(prices, "cinema, international release")
-        monthly_rent = find_average_price(prices, "apartment (1 bedroom) in city centre")
+        monthly_rent = find_average_price(
+            prices, "apartment (1 bedroom) in city centre"
+        )
         if monthly_rent is None:
-            monthly_rent = find_average_price(prices, "apartment (1 bedroom) in city center")
-        if meal_price is None and transit_price is None and activity_price is None and monthly_rent is None:
-            raise ValueError("No meal, activity, transit, or accommodation prices were returned for this city.")
+            monthly_rent = find_average_price(
+                prices, "apartment (1 bedroom) in city center"
+            )
+        if (
+            meal_price is None
+            and transit_price is None
+            and activity_price is None
+            and monthly_rent is None
+        ):
+            raise ValueError(
+                "No meal, activity, transit, or accommodation prices were returned for this city."
+            )
 
         food = (meal_price or 0) * 3 * travelers * days
         local_transport = (transit_price or 0) * 3 * travelers * days
@@ -327,18 +417,20 @@ def budget():
         if monthly_rent is None:
             unavailable.append("accommodation")
 
-        return jsonify({
-            "city": data.get("name", city),
-            "currency": response_currency or currency,
-            "days": days,
-            "travelers": travelers,
-            "total": round(priced_costs + contingency, 2),
-            "breakdown": breakdown,
-            "unavailable": unavailable,
-            "updated_month": data.get("monthLastUpdate"),
-            "updated_year": data.get("yearLastUpdate"),
-            "source": "Numbeo current city prices",
-        })
+        return jsonify(
+            {
+                "city": data.get("name", city),
+                "currency": response_currency or currency,
+                "days": days,
+                "travelers": travelers,
+                "total": round(priced_costs + contingency, 2),
+                "breakdown": breakdown,
+                "unavailable": unavailable,
+                "updated_month": data.get("monthLastUpdate"),
+                "updated_year": data.get("yearLastUpdate"),
+                "source": "Numbeo current city prices",
+            }
+        )
     except Exception as exc:
         return jsonify({"error": f"Unable to estimate current city costs: {exc}"}), 502
 

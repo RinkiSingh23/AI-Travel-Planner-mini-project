@@ -1,3 +1,6 @@
+/* --------------------------------------------------------------------------
+ * Shared app state
+ * -------------------------------------------------------------------------- */
 const state = {
   plan: null,
   records: [],
@@ -12,6 +15,9 @@ const BUDGET_API_URL = `${API_BASE_URL}/budget`;
 const LOCAL_STORAGE_KEY = "roamwell-saved-plans";
 const LOCATION_API_URL = API_BASE_URL;
 
+/* --------------------------------------------------------------------------
+ * Destination-specific content
+ * -------------------------------------------------------------------------- */
 const destinationProfiles = [{
   match: /jaipur|rajasthan/i,
   attractions: ["Amber Fort at golden hour", "City Palace courtyards", "Hawa Mahal streets"],
@@ -56,6 +62,9 @@ const destinationProfiles = [{
   safety: "Share your itinerary with someone you trust, use licensed transport, and keep digital copies of important documents."
 }];
 
+/* --------------------------------------------------------------------------
+ * Visual prompts used for cards and recommendations
+ * -------------------------------------------------------------------------- */
 const visualProfiles = [{
   match: /jaipur|rajasthan/i,
   items: [
@@ -90,6 +99,9 @@ const visualProfiles = [{
   ]
 }];
 
+/* --------------------------------------------------------------------------
+ * Suggested trip ideas for the assistant
+ * -------------------------------------------------------------------------- */
 const tripOptions = [{
   destination: "Rishikesh, India",
   currency: "INR",
@@ -155,6 +167,9 @@ function visualProfileFor(destination) {
   return visualProfiles.find(item => item.match.test(destination)) || visualProfiles[visualProfiles.length - 1];
 }
 
+/* --------------------------------------------------------------------------
+ * Assistant helpers
+ * -------------------------------------------------------------------------- */
 function parseAssistantRequest(text) {
   const normalized = text.toLowerCase();
   const amountMatch = normalized.match(/(?:₹|rs\.?|inr|\$|usd|€|eur)?\s*([\d,]+(?:\.\d+)?)/i);
