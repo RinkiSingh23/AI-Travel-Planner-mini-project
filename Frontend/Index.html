@@ -1,0 +1,498 @@
+﻿<!doctype html>
+<html lang="en">
+ <head>
+<script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260916-03-7343f9b","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YAHO2-t-jNE,0","Arial":"YAGyDvJ_4Ts,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Canva Sans":"YAFLd8sKbwc,2","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAHO2VMiyZo,0","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAEul-FRQw4,0","Georgia":"YAGzXkO0pEM,0","Helvetica Neue":"YAFcf6CtJfI,0","Impact":"YAFcfnjI7Vk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YAHO2a5g66Q,0","JetBrains Mono":"YAFdJksXcAk,0","Libre Baskerville":"YACgEUFdPdA,0","Manrope":"YAHO2b2feC4,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YADLjI9qxTA,0","Nunito":"YACgEX8C5Gg,0","Oleo Script":"YACgEQQ14jI,0","Phantom Sans":"YAHO2E8Pb88,0","Playfair Display":"YACgEYmuCJE,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YADWjpfPmdk,0","Raleway":"YACgEVg3xZg,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Spectral":"YAHO2rVUHIM,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Ubuntu":"YACgERDU--Q,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YADlN8CFZ8Q,0","ui-sans-serif":"YACkoN-xg4g,0"}}');</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Travel Planner</title>
+        <link rel="icon" href="data:,">
+  <script src="https://cdn.tailwindcss.com/3.4.17">
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js">
+</script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+        <link href="https://fonts.googleapis.com/css2?family=Bangers&amp;family=DM+Sans:wght@400;500;600;700&amp;family=M+PLUS+Rounded+1c:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+ </head>
+ <body data-template-id="__page-root" class="w-full">
+  <header class="relative overflow-hidden">
+   <div class="absolute inset-0">
+<img data-template-id="hero-image" loading="lazy" class="canva-image hero-photo h-full w-full object-cover">
+    <div class="hero-shade absolute inset-0">
+</div>
+   </div>
+   <div class="relative mx-auto flex min-h-[620px] w-full max-w-7xl flex-col px-5 py-7 sm:px-8 lg:px-10">
+    <nav aria-label="Primary navigation" class="flex items-center justify-between text-white">
+     <div class="flex items-center gap-3">
+      <div class="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/15">
+<i data-lucide="compass" class="h-5 w-5">
+</i>
+      </div>
+      <p data-template-id="brand-name" class="canva-text font-semibold tracking-wide">
+</p>
+     </div>
+     <div data-template-id="nav-badge" class="canva-tag rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm">
+</div>
+    </nav>
+    <div class="my-auto grid items-end gap-10 pt-14 lg:grid-cols-[1fr_530px]">
+     <section class="max-w-2xl text-white">
+      <p data-template-id="hero-kicker" class="canva-text mb-4 text-sm font-semibold uppercase tracking-[.22em]">
+</p>
+      <h1 data-template-id="hero-title" class="canva-text display-font max-w-xl leading-[1.02]">
+</h1>
+      <p data-template-id="hero-description" class="canva-text mt-6 max-w-xl text-lg leading-relaxed text-white/85">
+</p>
+      <div class="mt-9 flex flex-wrap gap-5 text-sm text-white/90">
+<span class="flex items-center gap-2">
+<i data-lucide="sparkles" class="h-4 w-4 text-[#9be6df]">
+</i>
+<span data-template-id="hero-detail-one" class="canva-text">
+</span>
+</span> <span class="flex items-center gap-2">
+<i data-lucide="map" class="h-4 w-4 text-[#9be6df]">
+</i>
+<span data-template-id="hero-detail-two" class="canva-text">
+</span>
+</span>
+      </div>
+     </section>
+        <section id="planner-panel" data-template-id="planner-panel" class="canva-panel planner-panel rounded-3xl border border-white/60 p-5 sm:p-7">
+      <div class="mb-5 flex items-start justify-between gap-4">
+       <div>
+        <p data-template-id="planner-eyebrow" class="canva-text text-xs font-bold uppercase tracking-[.17em]">
+</p>
+        <h2 data-template-id="planner-title" class="canva-text display-font mt-1 text-2xl">
+</h2>
+       </div>
+<i data-lucide="route" class="planner-route-icon mt-1 h-6 w-6">
+</i>
+      </div>
+        <div class="planner-steps" aria-label="Trip planning stages">
+         <span><b>01</b> Place</span>
+         <span><b>02</b> Details</span>
+         <span><b>03</b> Your vibe</span>
+        </div>
+        <form id="trip-form" class="planner-form">
+         <div class="trip-field trip-field-destination">
+<label data-template-id="destination-label" class="canva-text mb-1.5 block text-sm font-semibold" for="destination">
+</label>
+        <div class="location-field relative">
+<i data-lucide="map-pin" class="absolute left-3 top-3 h-4 w-4 text-[#5d7680]">
+</i> <input id="destination" class="field-control pl-9 pr-12" list="location-suggestions" type="text" placeholder="e.g. Jaipur, India" autocomplete="off" required> <button id="use-location" class="location-button" type="button" title="Use my current location" aria-label="Use my current location">
+<i data-lucide="locate-fixed" class="h-4 w-4">
+</i>
+</button>
+         <datalist id="location-suggestions">
+</datalist>
+         <div id="location-suggestion-menu" class="location-suggestion-menu hidden-view" role="listbox">
+</div>
+        </div>
+       </div>
+        <div class="trip-field trip-field-dates grid grid-cols-2 gap-3">
+        <div>
+<label data-template-id="start-date-label" class="canva-text mb-1.5 block text-sm font-semibold" for="start-date">
+</label> <input id="start-date" class="field-control" type="date" required>
+        </div>
+        <div>
+<label data-template-id="end-date-label" class="canva-text mb-1.5 block text-sm font-semibold" for="end-date">
+</label> <input id="end-date" class="field-control" type="date" required>
+        </div>
+       </div>
+        <div class="trip-field trip-field-budget grid grid-cols-[1fr_112px] gap-3">
+        <div>
+<label data-template-id="budget-label" class="canva-text mb-1.5 block text-sm font-semibold" for="budget">
+</label> <input id="budget" class="field-control" type="number" min="1000" step="500" placeholder="25000" required>
+        </div>
+        <div>
+<label data-template-id="currency-label" class="canva-text mb-1.5 block text-sm font-semibold" for="currency">
+</label> <select id="currency" class="field-control"> <option value="INR">INR</option> <option value="USD">USD</option> <option value="EUR">EUR</option> </select>
+        </div>
+       </div>
+        <div class="trip-field trip-field-travelers">
+<label data-template-id="travelers-label" class="canva-text mb-1.5 block text-sm font-semibold" for="travelers">
+</label> <input id="travelers" class="field-control" type="number" min="1" max="20" step="1" value="2" required>
+      </div>
+        <fieldset class="trip-field trip-field-interests">
+<legend data-template-id="interests-label" class="canva-text mb-2 block text-sm font-semibold">
+</legend>
+        <div class="grid grid-cols-3 gap-2">
+<label class="interest-choice cursor-pointer"> <input class="sr-only" type="checkbox" value="Culture" checked> <span class="block rounded-xl border border-[#cbd9dc] px-2 py-2 text-center text-xs font-semibold">Culture</span> </label> <label class="interest-choice cursor-pointer"> <input class="sr-only" type="checkbox" value="Food" checked> <span class="block rounded-xl border border-[#cbd9dc] px-2 py-2 text-center text-xs font-semibold">Food</span> </label> <label class="interest-choice cursor-pointer"> <input class="sr-only" type="checkbox" value="Nature"> <span class="block rounded-xl border border-[#cbd9dc] px-2 py-2 text-center text-xs font-semibold">Nature</span> </label> <label class="interest-choice cursor-pointer"> <input class="sr-only" type="checkbox" value="Shopping"> <span class="block rounded-xl border border-[#cbd9dc] px-2 py-2 text-center text-xs font-semibold">Shopping</span> </label> <label class="interest-choice cursor-pointer"> <input class="sr-only" type="checkbox" value="Adventure"> <span class="block rounded-xl border border-[#cbd9dc] px-2 py-2 text-center text-xs font-semibold">Adventure</span> </label> <label class="interest-choice cursor-pointer"> <input class="sr-only" type="checkbox" value="Wellness"> <span class="block rounded-xl border border-[#cbd9dc] px-2 py-2 text-center text-xs font-semibold">Wellness</span> </label>
+        </div>
+       </fieldset>
+        <div class="trip-field trip-field-mode">
+<label data-template-id="mode-label" class="canva-text mb-1.5 block text-sm font-semibold" for="travel-mode">
+</label> <select id="travel-mode" class="field-control"> <option value="Flight">Flight</option> <option value="Train">Train</option> <option value="Bus">Bus</option> <option value="Road trip">Road trip</option> </select>
+      </div>
+        <div class="trip-field trip-field-occasion">
+<label data-template-id="occasion-label" class="canva-text mb-1.5 block text-sm font-semibold" for="occasion">
+</label> <select id="occasion" class="field-control"> <option value="Everyday escape">Everyday escape</option> <option value="Birthday">Birthday</option> <option value="Anniversary">Anniversary</option> <option value="Date night">Date night</option> <option value="Proposal">Proposal</option> <option value="Family celebration">Family celebration</option> </select>
+      </div>
+<button data-template-id="generate-button" class="canva-button flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-bold shadow-lg shadow-[#007c91]/20 transition hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-70" type="submit"> <i data-lucide="sparkles" class="h-4 w-4">
+</i> <span>
+</span> </button>
+      </form>
+      <p id="form-message" class="mt-3 min-h-5 text-center text-sm font-medium" aria-live="polite">
+</p>
+     </section>
+    </div>
+   </div>
+  </header>
+  <main class="w-full bg-[#f7f4ec] px-5 py-12 sm:px-8 lg:px-10">
+   <div class="mx-auto w-full max-w-7xl">
+    <section id="empty-workspace" data-template-id="empty-workspace" class="canva-banner rounded-3xl border border-dashed border-[#b8c9cd] bg-white/55 px-6 py-16 text-center">
+     <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#dff5f3] text-[#007c91]">
+<i data-lucide="plane" class="h-7 w-7">
+</i>
+     </div>
+     <h2 data-template-id="empty-title" class="canva-text display-font mt-5 text-3xl">
+</h2>
+     <p data-template-id="empty-description" class="canva-text mx-auto mt-3 max-w-lg leading-relaxed">
+</p>
+        <div class="destination-picks" aria-label="Choose a destination to start planning">
+         <button class="destination-pick" type="button" data-destination="Jaipur, India">
+          <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Hawa Mahal in Jaipur" loading="lazy">
+          <span class="destination-pick-caption"><span>Architecture &amp; colour</span><strong>Jaipur, India</strong></span>
+         </button>
+         <button class="destination-pick" type="button" data-destination="Tokyo, Japan">
+          <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Tokyo city lights at dusk" loading="lazy">
+          <span class="destination-pick-caption"><span>Big-city energy</span><strong>Tokyo, Japan</strong></span>
+         </button>
+         <button class="destination-pick" type="button" data-destination="Paris, France">
+          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Paris rooftops and the Eiffel Tower" loading="lazy">
+          <span class="destination-pick-caption"><span>Slow days &amp; cafés</span><strong>Paris, France</strong></span>
+         </button>
+        </div>
+    </section>
+    <section id="results-workspace" class="hidden-view space-y-8" aria-live="polite">
+     <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+      <div>
+       <p data-template-id="results-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em]">
+</p>
+       <h2 id="trip-heading" class="display-font mt-2 text-4xl">
+</h2>
+       <p id="trip-summary" class="mt-2 text-[#506b75]">
+</p>
+      </div>
+<button id="save-plan-button" data-template-id="save-plan-button" type="button" class="canva-button flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-bold transition hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-60"> <i data-lucide="bookmark-plus" class="h-4 w-4">
+</i>
+<span>
+</span> </button>
+     </div>
+     <p id="save-message" class="min-h-5 text-sm font-semibold" aria-live="polite">
+</p>
+        <nav id="dashboard-tabs" class="dashboard-tabs" role="group" aria-label="Trip dashboard sections">
+         <button class="dashboard-tab" type="button" data-dashboard-tab="overview" aria-pressed="true"><i data-lucide="layout-dashboard"></i><span>Overview</span></button>
+         <button class="dashboard-tab" type="button" data-dashboard-tab="hotels" aria-pressed="false"><i data-lucide="bed-double"></i><span>Hotels</span></button>
+         <button class="dashboard-tab" type="button" data-dashboard-tab="transport" aria-pressed="false"><i data-lucide="train-front"></i><span>Transport</span></button>
+         <button class="dashboard-tab" type="button" data-dashboard-tab="budget" aria-pressed="false"><i data-lucide="wallet-cards"></i><span>Budget</span></button>
+         <button class="dashboard-tab" type="button" data-dashboard-tab="places" aria-pressed="false"><i data-lucide="map-pin"></i><span>Places</span></button>
+         <button class="dashboard-tab" type="button" data-dashboard-tab="map" aria-pressed="false"><i data-lucide="map"></i><span>Map</span></button>
+         <button class="dashboard-tab" type="button" data-dashboard-tab="itinerary" aria-pressed="false"><i data-lucide="calendar-days"></i><span>Itinerary</span></button>
+         <button class="dashboard-tab" type="button" data-dashboard-tab="checklist" aria-pressed="false"><i data-lucide="list-checks"></i><span>Checklist</span></button>
+        </nav>
+        <div id="overview-metrics" data-dashboard-view="overview" class="overview-metrics">
+         <article class="overview-metric"><span>Duration</span><strong id="overview-days"></strong></article>
+         <article class="overview-metric"><span>Travelers</span><strong id="overview-travelers"></strong></article>
+         <article class="overview-metric"><span>Travel mode</span><strong id="overview-mode"></strong></article>
+         <article class="overview-metric"><span>Budget limit</span><strong id="overview-budget"></strong></article>
+        </div>
+        <div id="weather-banner" data-template-id="weather-banner" data-dashboard-view="overview" class="canva-banner rounded-2xl p-4">
+         <div class="flex gap-3">
+          <i data-lucide="cloud-sun" class="mt-0.5 h-5 w-5"></i>
+          <div><p id="weather-title" class="font-bold"></p><p id="weather-description" class="mt-1 text-sm leading-relaxed"></p></div>
+         </div>
+        </div>
+        <section id="safety-section" data-template-id="safety-section" data-dashboard-view="overview" class="canva-section rounded-3xl border border-[#c8dfdc] bg-[#e7f5f2] p-6">
+         <div class="grid gap-5 sm:grid-cols-[auto_1fr_auto] sm:items-center">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#007c91] text-white"><i data-lucide="shield-check" class="h-6 w-6"></i></div>
+          <div><h2 data-template-id="safety-title" class="canva-text display-font text-2xl"></h2><p id="safety-copy" class="mt-1 leading-relaxed text-[#315760]"></p></div>
+          <div id="emergency-number" class="rounded-2xl bg-white px-5 py-3 text-center"></div>
+         </div>
+        </section>
+        <section id="hotels-panel" data-dashboard-view="hotels" class="canva-section dashboard-info-panel hidden-view">
+         <p class="dashboard-kicker">Stay planning</p>
+         <h2 class="display-font">Hotels near your destination</h2>
+         <p id="hotel-estimate" class="hotel-estimate"></p>
+         <p id="hotel-estimate-note" class="hotel-estimate-note">Live city prices do not include hotel quotes. Use the map search to compare available stays.</p>
+         <a id="hotel-search-link" class="canva-button hotel-search-link" href="https://www.google.com/maps" target="_blank" rel="noreferrer"><i data-lucide="external-link" class="h-4 w-4"></i><span>Search hotels on Maps</span></a>
+        </section>
+        <div id="itinerary-budget-layout" data-dashboard-layout class="grid gap-6 lg:grid-cols-[1.35fr_.85fr]">
+         <section id="itinerary-section" data-template-id="itinerary-section" data-dashboard-view="itinerary" class="canva-section soft-card rounded-3xl bg-white p-5 sm:p-7">
+       <div class="mb-6 flex items-center justify-between gap-3">
+        <div>
+         <p data-template-id="itinerary-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em]">
+</p>
+         <h2 data-template-id="itinerary-title" class="canva-text display-font mt-1 text-3xl">
+</h2>
+        </div>
+        <div class="rounded-full bg-[#dff5f3] p-3 text-[#007c91]">
+         <i data-lucide="calendar-days" class="h-5 w-5">
+</i>
+        </div>
+       </div>
+       <div id="itinerary-list" class="space-y-4">
+</div>
+      </section>
+      <aside class="space-y-6">
+        <section id="budget-section" data-template-id="budget-section" data-dashboard-view="budget" class="canva-card soft-card rounded-3xl bg-[#102a43] p-6 text-white">
+        <div class="flex items-start justify-between">
+         <div>
+          <p data-template-id="budget-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em]">
+</p>
+          <h2 data-template-id="budget-title" class="canva-text display-font mt-1 text-2xl">
+</h2>
+         </div>
+<i data-lucide="wallet-cards" class="h-6 w-6 text-[#9be6df]">
+</i>
+        </div>
+        <p id="budget-total" class="display-font mt-6 text-4xl">
+</p>
+        <p id="budget-daily" class="mt-1 text-sm text-white/70">
+</p>
+        <p id="budget-per-person" class="mt-1 text-sm font-semibold text-[#f5c96a]">
+</p>
+        <p id="budget-remaining" class="mt-2 rounded-md bg-[#ffd84d] px-3 py-2 text-sm font-extrabold text-[#20223a]">
+</p>
+        <p id="budget-source" class="mt-2 text-xs leading-relaxed text-white/65">
+</p>
+        <div id="budget-splits" class="mt-6 space-y-3">
+</div>
+       </section>
+        <section id="transport-section" data-template-id="transport-section" data-dashboard-view="transport" class="canva-card soft-card rounded-3xl bg-white p-6">
+        <div class="flex items-center justify-between">
+         <div>
+          <p data-template-id="transport-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em]">
+</p>
+          <h2 data-template-id="transport-title" class="canva-text display-font mt-1 text-2xl">
+</h2>
+         </div>
+<i data-lucide="ticket" class="h-6 w-6 text-[#f1765d]">
+</i>
+        </div>
+        <div class="mt-5 rounded-2xl bg-[#f7f4ec] p-4">
+         <p id="mode-name" class="font-bold">
+</p>
+         <p id="fare-estimate" class="mt-1 text-sm text-[#506b75]">
+</p>
+        </div>
+        <p data-template-id="transport-note" class="canva-text mt-4 text-sm leading-relaxed">
+</p>
+       </section>
+      </aside>
+     </div>
+        <div id="places-checklist-layout" data-dashboard-layout class="grid gap-6 lg:grid-cols-2">
+         <section data-template-id="guide-section" data-dashboard-container="places" class="canva-section soft-card overflow-hidden rounded-3xl bg-white">
+       <div class="p-6 pb-3">
+        <p data-template-id="guide-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em]">
+</p>
+        <h2 data-template-id="guide-title" class="canva-text display-font mt-1 text-3xl">
+</h2>
+       </div>
+          <div id="place-lists" data-dashboard-view="places" class="grid gap-6 p-6 sm:grid-cols-2">
+        <div>
+         <h3 data-template-id="attractions-title" class="canva-text font-bold">
+</h3>
+         <ul id="attractions-list" class="mt-3 space-y-2 text-sm">
+</ul>
+        </div>
+        <div>
+         <h3 data-template-id="food-title" class="canva-text font-bold">
+</h3>
+         <ul id="food-list" class="mt-3 space-y-2 text-sm">
+</ul>
+        </div>
+       </div>
+      </section>
+        <section id="packing-section" data-template-id="packing-section" data-dashboard-view="checklist" class="canva-section soft-card rounded-3xl bg-white p-6">
+       <div class="flex items-start justify-between gap-4">
+        <div>
+         <p data-template-id="packing-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em]">
+</p>
+         <h2 data-template-id="packing-title" class="canva-text display-font mt-1 text-3xl">
+</h2>
+        </div>
+<i data-lucide="luggage" class="h-7 w-7 text-[#007c91]">
+</i>
+       </div>
+       <div id="packing-list" class="mt-5 grid gap-2 sm:grid-cols-2">
+</div>
+        <form id="packing-add-form" class="packing-add-form" autocomplete="off">
+         <label class="sr-only" for="packing-add-input">New checklist item</label>
+         <input id="packing-add-input" class="field-control" type="text" maxlength="80" placeholder="Add a checklist item">
+         <button class="canva-button" type="submit"><i data-lucide="plus" class="h-4 w-4"></i><span>Add item</span></button>
+        </form>
+        <p id="packing-add-status" class="packing-add-status" aria-live="polite"></p>
+      </section>
+     </div>
+      <section id="map-panel" data-dashboard-view="map" class="canva-section soft-card dashboard-map-panel hidden-view">
+       <div class="mb-5"><p class="dashboard-kicker">Explore</p><h2 id="map-title" class="display-font text-3xl">Destination map</h2></div>
+       <div class="relative overflow-hidden rounded-xl bg-[#dff5f3]">
+        <div id="trip-map" class="trip-map" aria-label="Interactive destination map"></div>
+        <p id="map-label" class="pointer-events-none absolute bottom-3 left-4 z-[500] rounded-full bg-white/90 px-3 py-1 text-xs font-bold shadow-sm"></p>
+        <button id="map-refresh" class="map-refresh" type="button" title="Refresh map" aria-label="Refresh map"><i data-lucide="refresh-cw" class="h-4 w-4"></i></button>
+       </div>
+      </section>
+      <section id="visual-section" data-template-id="visual-section" data-dashboard-view="places" class="visual-section rounded-3xl bg-[#173d46] p-5 text-white sm:p-7">
+       <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div>
+         <p data-template-id="visual-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em] text-[#f5c96a]">
+</p>
+         <h2 data-template-id="visual-title" class="canva-text display-font mt-1 text-3xl">
+</h2>
+        </div>
+        <i data-lucide="camera" class="h-6 w-6 text-[#f5c96a]">
+</i>
+       </div>
+       <div id="visual-gallery" class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+</div>
+      </section>
+        <section data-template-id="celebration-section" data-dashboard-view="places" class="celebration-section rounded-3xl border border-[#f2d6ad] bg-[#fff8ed] p-5 sm:p-7">
+       <div class="flex items-start justify-between gap-4">
+        <div>
+         <p data-template-id="celebration-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em] text-[#c76646]">
+</p>
+         <h2 data-template-id="celebration-title" class="canva-text display-font mt-1 text-3xl">
+</h2>
+         <p id="celebration-description" class="mt-2 max-w-2xl text-sm leading-relaxed text-[#6b5a4b]">
+</p>
+        </div>
+        <i data-lucide="party-popper" class="h-6 w-6 shrink-0 text-[#e97857]">
+</i>
+       </div>
+       <div id="celebration-list" class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+</div>
+      </section>
+    </section>
+        <section id="trip-assistant" class="trip-assistant mt-12 rounded-3xl bg-[#173d46] p-5 text-white sm:p-7">
+         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+          <div>
+           <p data-template-id="assistant-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em] text-[#f5c96a]"></p>
+           <h2 data-template-id="assistant-title" class="canva-text display-font mt-1 text-3xl"></h2>
+           <p data-template-id="assistant-description" class="canva-text mt-2 max-w-2xl text-sm leading-relaxed text-white/75"></p>
+          </div>
+          <i data-lucide="messages-square" class="h-7 w-7 shrink-0 text-[#9be6df]"></i>
+         </div>
+         <div id="assistant-messages" class="assistant-messages mt-6 space-y-3" aria-live="polite"></div>
+         <form id="assistant-form" class="mt-5 flex flex-col gap-3 sm:flex-row">
+          <label class="sr-only" for="assistant-input">Ask the trip assistant</label>
+          <input id="assistant-input" class="field-control flex-1" type="text" placeholder="Try: trips under 30000 INR for food and culture" autocomplete="off">
+          <button class="canva-button flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-bold" type="submit">
+           <i data-lucide="send" class="h-4 w-4"></i>
+           <span data-template-id="assistant-submit"></span>
+          </button>
+         </form>
+         <p id="assistant-status" class="mt-3 min-h-5 text-sm text-[#f5c96a]" aria-live="polite"></p>
+        </section>
+    <section class="mt-12">
+     <div class="mb-5 flex items-end justify-between gap-4">
+      <div>
+       <p data-template-id="saved-kicker" class="canva-text text-xs font-bold uppercase tracking-[.18em]">
+</p>
+       <h2 data-template-id="saved-title" class="canva-text display-font mt-1 text-3xl">
+</h2>
+      </div>
+<span id="saved-count" class="rounded-full bg-[#dff5f3] px-3 py-1 text-sm font-bold text-[#075968]">0</span>
+     </div>
+     <div id="saved-empty" data-template-id="saved-empty" class="canva-banner rounded-2xl border border-dashed border-[#b8c9cd] px-5 py-8 text-center">
+</div>
+     <div id="saved-plans-list" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+</div>
+    </section>
+   </div>
+  </main>
+  <template id="day-template">
+   <article data-template-id="day-card" class="canva-card reveal rounded-2xl border border-[#e2eaeb] p-4">
+                <img class="day-image" loading="lazy">
+    <div class="flex gap-4">
+     <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#dff5f3] font-bold text-[#007c91]">
+      <span class="day-number">
+</span>
+     </div>
+     <div class="min-w-0 flex-1">
+      <div class="flex flex-wrap items-baseline justify-between gap-2">
+       <h3 class="day-title font-bold">
+</h3>
+<span class="day-date text-xs font-semibold text-[#65808a]">
+</span>
+      </div>
+      <div class="day-activities mt-3 space-y-2">
+</div>
+     </div>
+    </div>
+   </article>
+  </template>
+  <template id="activity-template">
+   <div class="flex items-start gap-3 text-sm">
+<span class="activity-time w-16 shrink-0 font-bold text-[#007c91]">
+</span> <span class="activity-text leading-relaxed">
+</span>
+   </div>
+  </template>
+  <template id="budget-row-template">
+   <div>
+    <div class="mb-1 flex justify-between text-sm">
+    <span class="budget-name text-white/80">
+</span>
+<span class="budget-value font-bold">
+</span>
+    </div>
+      <p class="budget-person-value mb-1 text-xs text-white/55">
+</p>
+    <div class="h-1.5 overflow-hidden rounded-full bg-white/15">
+     <div class="budget-bar h-full rounded-full bg-[#9be6df]">
+</div>
+    </div>
+   </div>
+  </template>
+  <template id="list-item-template">
+   <li class="flex items-start gap-2">
+<i data-lucide="check" class="mt-0.5 h-4 w-4 shrink-0 text-[#007c91]">
+</i>
+<span class="list-item-text">
+</span>
+</li>
+  </template>
+  <template id="packing-item-template">
+<label class="check-item flex cursor-pointer items-center gap-3 rounded-xl border border-[#e3ebea] px-3 py-2.5 transition hover:border-[#8bcfcb]"> <input class="h-4 w-4 accent-[#007c91]" type="checkbox"> <span class="packing-item-text flex-1 text-sm">
+</span> <i data-lucide="check-circle-2" class="h-4 w-4 text-[#b4c4c8]">
+</i> </label>
+  </template>
+  <template id="saved-plan-template">
+   <article data-template-id="saved-plan-card" class="canva-card saved-card rounded-2xl bg-white p-5">
+    <div class="flex items-start justify-between gap-3">
+     <div>
+      <p class="saved-destination display-font text-2xl">
+</p>
+      <p class="saved-dates mt-1 text-sm text-[#58717b]">
+</p>
+     </div>
+<i data-lucide="map-pinned" class="h-5 w-5 text-[#f1765d]">
+</i>
+    </div>
+    <div class="mt-4 flex items-center justify-between border-t border-[#e7eeee] pt-4 text-sm">
+<span class="saved-budget font-semibold">
+</span> <span class="saved-mode rounded-full bg-[#dff5f3] px-3 py-1 text-xs font-bold text-[#075968]">
+</span>
+    </div>
+    <div class="mt-4 flex gap-2">
+<button data-template-id="load-plan-button" class="canva-button load-plan flex-1 rounded-xl px-3 py-2 text-sm font-bold" type="button">
+</button> <button data-template-id="delete-plan-button" class="canva-button delete-plan rounded-xl border border-[#f0b4a8] px-3 py-2 text-sm font-bold" type="button">
+</button>
+    </div>
+    <div class="delete-confirm hidden-view mt-3 rounded-xl bg-[#fff2ef] p-3">
+     <p data-template-id="delete-confirm-copy" class="canva-text text-sm font-semibold">
+</p>
+     <div class="mt-2 flex gap-2">
+<button data-template-id="confirm-delete-button" class="canva-button confirm-delete rounded-lg px-3 py-1.5 text-xs font-bold" type="button">
+</button> <button data-template-id="cancel-delete-button" class="canva-button cancel-delete rounded-lg px-3 py-1.5 text-xs font-bold" type="button">
+</button>
+     </div>
+    </div>
+   </article>
+  </template>
+  <script src="script.js">
+</script>
+ </body>
+</html>
